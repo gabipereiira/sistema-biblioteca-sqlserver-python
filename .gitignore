@@ -1,0 +1,18 @@
+# Python - Ficheiros temporários de compilação
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes Virtuais (Caso use venv)
+venv/
+ENV/
+
+# Configurações do PyCharm / IntelliJ
+.idea/
+
+# Ficheiros de sistema
+.DS_Store
+Thumbs.db
+
+# Ficheiros de log
+*.log
