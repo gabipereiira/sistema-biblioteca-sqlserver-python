@@ -10,22 +10,6 @@ cursor = conexao.cursor()
 Livro.conexao = conexao
 Livro.cursor = cursor
 
-# Verificação de Integridade de Esquema:
-# Garante que a tabela 'Livros' exista no banco de dados antes do início das operações.
-# O uso de IDENTITY(1,1) define a chave primária como autoincremento.
-cursor.execute("""
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Livros' and xtype='U')
-CREATE TABLE Livros (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    nome VARCHAR(255),
-    autor VARCHAR(255),
-    ano VARCHAR(10),
-    editora VARCHAR(255),
-    paginas INT
-)
-""")
-conexao.commit()
-
 # Loop principal do sistema (Runtime)
 while True:
     menu = input("""
@@ -56,15 +40,9 @@ while True:
                 numero_de_paginas = None
 
             # Instanciação do objeto Livro na memória
-            Livro(nome_livro, autor_livro, ano=ano, editora=editora, numero_de_paginas=numero_de_paginas)
+            novo_livro = Livro(nome_livro, autor_livro, ano=ano, editora=editora, numero_de_paginas=numero_de_paginas)
+            novo_livro.adicionar_livro()
 
-            # Persistência dos dados via SQL Parametrizado (Prevenção de SQL Injection)
-            cursor.execute("""
-                           INSERT INTO livros (nome, autor, ano, editora, paginas)
-                           VALUES (?, ?, ?, ?, ?)
-                           """, (nome_livro, autor_livro, ano, editora, numero_de_paginas))
-
-            conexao.commit()
             print(f'Livro {nome_livro} foi adicionado com sucesso.')
 
         except ValueError:
